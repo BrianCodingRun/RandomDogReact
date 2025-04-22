@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [randomDog, setRandomDog] = useState("");
+
+  const fetchDog = async () => {
+    try {
+      const request = await fetch("https://dog.ceo/api/breeds/image/random");
+      const response = await request.json();
+      setRandomDog(response.message);
+    } catch (error) {
+      console.log("An error occurred: " + error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDog();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <main className="main-app">
+      <div className="main-container">
+        <h1>ReactRandomDOG</h1>
+        <div className="card">
+          <img src={randomDog} alt="Dog cover picture" />
+          <p>
+            Url: <span>{randomDog}</span>
+          </p>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </main>
+  );
 }
 
-export default App
+export default App;
